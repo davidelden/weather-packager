@@ -4,7 +4,7 @@ const http = require('http'),
       streamName = 'WeatherPackage';
 
 const weatherFetchServiceApiUrl = zipCode => {
-  return process.env.WEATHER_FETCH_SERVICE_API_BASE_URL + `/api/v1/weather-data/${zipCode}?key=${process.env.WEATHER_FETCH_SERVICE_API_KEY}`;
+  return process.env.WEATHER_FETCH_SERVICE_API_BASE_URL + `${zipCode}?key=${process.env.WEATHER_FETCH_SERVICE_API_KEY}`;
 }
 
 const fetchWeatherData = msg => {
