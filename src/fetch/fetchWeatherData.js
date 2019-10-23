@@ -37,7 +37,7 @@ const fetchFromAPI = (url, dbTbl, zipCode) => {
     }
 
     if (error) {
-      writeStream(streamName, eventMessages['error']);
+      writeStream(streamName, eventMessages['error'](error);
       console.error(error.message);
       // consume response data to free up memory
       res.resume();
@@ -52,20 +52,20 @@ const fetchFromAPI = (url, dbTbl, zipCode) => {
               weatherData = { ...parsedData[0]['data'] };
 
         console.log('[fetchFromAPI]', weatherData);
-        // saveWeatherData(dbTbl, zipCode, ...weatherData);
+        // saveWeatherPackage(dbTbl, zipCode, ...weatherData);
       } catch (err) {
-        writeStream(streamName, eventMessages['error']);
+        writeStream(streamName, eventMessages['error'](err);
         console.error(err.message);
       }
     });
   })
   .on('error', err => {
-    writeStream(streamName, eventMessages['error']);
+    writeStream(streamName, eventMessages['error'](err);
     console.error(`http.get received an error: ${err.message}`);
   });
 }
 
-const saveWeatherData = (dbTbl, zipCode, data) => {
+const saveWeatherPackage = (dbTbl, zipCode, data) => {
   db(dbTbl)
     .where({ zip_code: zipCode })
     .update({ data: data, updated_at: db.fn.now() })
