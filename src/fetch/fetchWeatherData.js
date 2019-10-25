@@ -1,4 +1,4 @@
-const http = require('http'),
+const fetchFromAPI = require('./helpers/fetchFromAPI.js'),
       writeStream = require('../streams/actions/writeStream.js'),
       eventMessages = require('../streams/events/eventMessages.js'),
       streamName = 'WeatherPackage';
@@ -8,61 +8,24 @@ const weatherFetchServiceApiUrl = zipCode => {
 }
 
 const fetchWeatherData = msg => {
-  if(!Array.isArray(msg) || msg[0] !== 'WeatherFetchDataAvailable') return;
+  if(!Array.isArray(msg) || msg[1] !== 'WeatherFetchDataAvailable') return;
 
   writeStream(streamName, eventMessages['start']);
 
-  const zipCode = msg[1],
+  const zipCode = msg[3],
         endPoint = weatherFetchServiceApiUrl(zipCode);
 
-  fetchFromAPI(endPoint, 'some_table', zipCode); // Update with real db table
+  fetchFromAPI(endPoint)
+    .then(data => console.log(data))
+    // .then(data => {
+    //   // fn to interpret data and create message
+    // })
+    // .then(message => {
+    //   // fn to save message to db
+    // })
+    .catch(err => console.error(err));
 
   writeStream(streamName, eventMessages['end']);
-}
-
-const fetchFromAPI = (url, dbTbl, zipCode) => {
-  http.get(url, res => {
-    const { statusCode } = res,
-          contentType = res.headers['content-type'];
-
-    let error,
-        rawData = '';
-
-    if (statusCode !== 200) {
-      error = new Error('Request Failed.\n' +
-                        `Status Code: ${statusCode}`);
-    } else if (!/^application\/json/.test(contentType)) {
-      error = new Error('Invalid content-type.\n' +
-                        `Expected application/json but received ${contentType}`);
-    }
-
-    if (error) {
-      writeStream(streamName, eventMessages['error'](error);
-      console.error(error.message);
-      // consume response data to free up memory
-      res.resume();
-      return;
-    }
-
-    res.setEncoding('utf8');
-    res.on('data', chunk => rawData += chunk);
-    res.on('end', () => {
-      try {
-        const parsedData = JSON.parse(rawData),
-              weatherData = { ...parsedData[0]['data'] };
-
-        console.log('[fetchFromAPI]', weatherData);
-        // saveWeatherPackage(dbTbl, zipCode, ...weatherData);
-      } catch (err) {
-        writeStream(streamName, eventMessages['error'](err);
-        console.error(err.message);
-      }
-    });
-  })
-  .on('error', err => {
-    writeStream(streamName, eventMessages['error'](err);
-    console.error(`http.get received an error: ${err.message}`);
-  });
 }
 
 const saveWeatherPackage = (dbTbl, zipCode, data) => {
