@@ -1,5 +1,6 @@
 const fetchFromAPI = require('./helpers/fetchFromAPI.js'),
       weatherAPIEndpoint = require('./helpers/weatherAPIEndpoint.js'),
+      saveWeatherPackage = require('./helpers/saveWeatherPackage.js'),
       writeStream = require('../streams/actions/writeStream.js'),
       eventMessages = require('../streams/events/eventMessages.js'),
       streamName = 'WeatherPackage';
@@ -18,25 +19,11 @@ const fetchWeatherData = msg => {
     //   // fn to interpret data and create message
     // })
     // .then(message => {
-    //   // fn to save message to db
+    //   // saveWeatherPackage()
     // })
     .catch(err => console.error(err));
 
   writeStream(streamName, eventMessages['end']);
-}
-
-const saveWeatherPackage = (dbTbl, zipCode, data) => {
-  db(dbTbl)
-    .where({ zip_code: zipCode })
-    .update({ data: data, updated_at: db.fn.now() })
-    .then(() => {
-      writeStream(streamName, eventMessages['data'](zipCode));
-      console.log(`${dbTbl} updated with ${zipCode} weather package`);
-    })
-    .catch(err => {
-      writeStream(streamName, eventMessages['error'](err));
-      console.error('error:', err);
-    })
 }
 
 module.exports = fetchWeatherData;
