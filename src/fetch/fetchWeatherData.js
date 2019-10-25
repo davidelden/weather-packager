@@ -1,11 +1,8 @@
 const fetchFromAPI = require('./helpers/fetchFromAPI.js'),
+      weatherAPIEndpoint = require('./helpers/weatherAPIEndpoint.js'),
       writeStream = require('../streams/actions/writeStream.js'),
       eventMessages = require('../streams/events/eventMessages.js'),
       streamName = 'WeatherPackage';
-
-const weatherFetchServiceApiUrl = zipCode => {
-  return process.env.WEATHER_FETCH_SERVICE_API_BASE_URL + `${zipCode}?key=${process.env.WEATHER_FETCH_SERVICE_API_KEY}`;
-}
 
 const fetchWeatherData = msg => {
   if(!Array.isArray(msg) || msg[1] !== 'WeatherFetchDataAvailable') return;
@@ -13,7 +10,7 @@ const fetchWeatherData = msg => {
   writeStream(streamName, eventMessages['start']);
 
   const zipCode = msg[3],
-        endPoint = weatherFetchServiceApiUrl(zipCode);
+        endPoint = weatherAPIEndpoint(zipCode);
 
   fetchFromAPI(endPoint)
     .then(data => console.log(data))
