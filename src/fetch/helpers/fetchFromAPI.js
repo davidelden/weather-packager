@@ -3,9 +3,9 @@ const http = require('http'),
       eventMessages = require('../../streams/events/eventMessages.js'),
       streamName = 'WeatherPackage';
 
-const fetchFromAPI = url => {
+const fetchFromAPI = endPoint => {
   return new Promise((resolve, reject) => {
-    http.get(url, res => {
+    http.get(endPoint, res => {
       const { statusCode } = res,
             contentType = res.headers['content-type'];
 
