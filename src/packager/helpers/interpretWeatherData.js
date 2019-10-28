@@ -1,16 +1,19 @@
+// Weather codes/descriptions https://www.weatherbit.io/api/codes
+
 const interpretWeatherData = data => {
-  const interpretedWeather = {},
-        { current_temp, high_temp, pop, precip, snow } = data,
-        forecast_description = data['weather']['description'].toLowerCase();
+  const  msgBuilder = {},
+         { current_temp,
+           high_temp,
+           pop,
+           city_name,
+           state_code } = data,
+         { description, code } = data['weather'];
 
-  interpretedWeather.current_temp = current_temp;
-  interpretedWeather.chance_of_precipitation = pop;
-  interpretedWeather.rain_amount = precip;
-  interpretedWeather.snow_amount = snow;
-  interpretedWeather.forecast_description = forecast_description;
-  interpretedWeather.high_temp = high_temp;
+  msgBuilder.currentTemp = `[DailyWeather] Currently it's ${current_temp}F in ${city_name}, ${state_code}.`;
+  msgBuilder.forecast = `Forecast: ${description} with a ${pop}% chance of precipitation.`;
+  msgBuilder.highTemp = `High temp: ${high_temp}F.`;
 
-  console.log('interpretedWeather', interpretedWeather);
+  return msgBuilder;
 }
 
 module.exports = interpretWeatherData;
