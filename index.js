@@ -2,8 +2,8 @@ require('dotenv').config();
 
 const readStream = require('./src/streams/actions/readStream.js'),
       msgEmitter = require('./src/emitter/msgEmitter'),
-      fetchWeatherData = require('./src/fetch/fetchWeatherData.js'),
+      createWeatherPackage = require('./src/packager/createWeatherPackage.js'),
       streamName = 'WeatherFetch';
 
 readStream(streamName);
-msgEmitter.on('streamMessage', msg => fetchWeatherData(msg));
+msgEmitter.on('streamMessage', msg => createWeatherPackage(msg));

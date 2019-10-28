@@ -1,4 +1,4 @@
-const db = require('../../db/connection.js'),
+const // db = require('../../db/connection.js'),
       writeStream = require('../../streams/actions/writeStream.js'),
       eventMessages = require('../../streams/events/eventMessages.js'),
       streamName = 'WeatherFetch';
