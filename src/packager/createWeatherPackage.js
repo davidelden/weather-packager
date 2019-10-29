@@ -18,7 +18,7 @@ const createWeatherPackage = async msg => {
           weatherMsg = interpretWeatherData(weatherData); // Interpret weather data
           snsParams = createSNSParamsObj(weatherMsg, zipCode); // Create message to send to AWS SNS
 
-    // saveWeatherPackage() <--- need to build this out
+    saveWeatherPackage('weather_packages', zipCode, snsParams);
 
     writeStream(streamName, eventMessages['end']);
 }
