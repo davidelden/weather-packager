@@ -3,7 +3,7 @@ module.exports = {
   connection: {
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
-    database: 'weather_fetch_data'
+    database: 'weather_packager_data'
   },
   pool: {
     min: 2,
