@@ -8,11 +8,11 @@ const fetchFromAPI = require('../fetch/helpers/fetchFromAPI.js'),
       streamName = 'WeatherPackage';
 
 const createWeatherPackage = async msg => {
-    if(!Array.isArray(msg) || msg[1] !== 'WeatherFetchDataAvailable') return;
+    if(!Array.isArray(msg) || msg[0] !== 'WeatherFetchDataAvailable') return;
 
     writeStream(streamName, eventMessages['start']);
 
-    const zipCode = msg[3],
+    const zipCode = msg[1],
           endPoint = weatherAPIEndpoint(zipCode),
           weatherData = await fetchFromAPI(endPoint), // Fetch weather
           weatherMsg = interpretWeatherData(weatherData); // Interpret weather data
