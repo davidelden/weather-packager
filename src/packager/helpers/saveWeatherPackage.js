@@ -10,7 +10,7 @@ const saveWeatherPackage = async (dbTbl, zipCode, data) => {
     .toString()
 
   const update = db(dbTbl)
-    .update({ message: JSON.stringify(data), updated_at: db.fn.now() })
+    .update({ message: JSON.stringify(data), published: false, updated_at: db.fn.now() })
     .whereRaw(`${dbTbl}.zip_code = ?`, [zipCode])
 
   const query = util.format(
