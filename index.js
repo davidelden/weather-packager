@@ -5,9 +5,11 @@ const migrateLatest = require('./src/db/migrateLatest.js'),
       msgEmitter = require('./src/emitter/msgEmitter'),
       createWeatherPackage = require('./src/packager/createWeatherPackage.js'),
       startServer = require('./src/api/server.js'),
-      streamWeatherFetch = 'WeatherFetch';
+      streamWeatherFetch = 'WeatherFetch',
+      streamWeatherSender = 'WeatherSender';
 
 migrateLatest();
 readStream(streamWeatherFetch);
+readStream(streamWeatherSender);
 msgEmitter.on('streamMessage', msg => createWeatherPackage(msg));
 startServer();
