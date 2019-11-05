@@ -2,7 +2,7 @@ const redis = require('redis'),
       client = redis.createClient({ host: 'redis' }),
       msgEmitter = require('../../emitter/msgEmitter.js');
 
-const readStream = (streamInfoArr, timeout = '0') => {
+const readStreams = (streamInfoArr, timeout = '0') => {
   const streamNames = streamInfoArr.map(stream => stream[0]),
         elemIds = streamInfoArr.map(stream => stream[1]),
         streamInfoArrCopy = [ ...streamInfoArr ];
@@ -32,8 +32,8 @@ const readStream = (streamInfoArr, timeout = '0') => {
       }
     }
 
-    readStream(streamInfoArrCopy);
+    readStreams(streamInfoArrCopy);
   });
 }
 
-module.exports = readStream;
+module.exports = readStreams;
