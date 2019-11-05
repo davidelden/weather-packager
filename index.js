@@ -1,13 +1,17 @@
 require('dotenv').config();
 
 const migrateLatest = require('./src/db/migrateLatest.js'),
-      readStream = require('./src/streams/actions/readStream.js'),
+      readStreams = require('./src/streams/actions/readStreams.js'),
       msgEmitter = require('./src/emitter/msgEmitter'),
       createWeatherPackage = require('./src/packager/createWeatherPackage.js'),
-      startServer = require('./src/api/server.js'),
-      streamName = 'WeatherFetch';
+      updateWeatherPackage = require('./src/packager/updateWeatherPackage.js'),
+      startServer = require('./src/api/server.js');
 
 migrateLatest();
-readStream(streamName);
-msgEmitter.on('streamMessage', msg => createWeatherPackage(msg));
+readStreams([['WeatherFetch', '$'], ['WeatherSender', '$']]);
 startServer();
+
+msgEmitter.on('streamMessage', msg => {
+  createWeatherPackage(msg);
+  updateWeatherPackage(msg);
+});
